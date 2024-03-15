@@ -16,19 +16,23 @@ import { Dispatch, SetStateAction } from 'react';
 
 interface LeaveRequestFormProps {
   request: {
-    startDate: Date;
-    endDate: Date;
+    startDate: Date | null;
+    endDate: Date | null;
     leaveType: string;
     reason: string;
     assignedTo: string;
+    leaveDays: number | null;
   };
-  setRequest: Dispatch<SetStateAction<{
-    startDate: Date;
-    endDate: Date;
-    leaveType: string;
-    reason: string;
-    assignedTo: string;
-  }>>;
+  setRequest: Dispatch<
+    SetStateAction<{
+      startDate: Date | null;
+      endDate: Date | null;
+      leaveType: string;
+      reason: string;
+      assignedTo: string;
+      leaveDays: number | null; 
+    }>
+  >;
   onChange: (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
@@ -56,13 +60,16 @@ const LeaveRequestForm: React.FC<LeaveRequestFormProps> = ({
   onSelectChange,
   onCreate,
   onCancel,
+  setRequest,
 }) => {
-  const [leaveDays, setLeaveDays] = useState<number | null>(null);
+
   const today = new Date();
 
   const calculateLeaveDays = (startDate: Date, endDate: Date) => {
     let days = 0;
-    let currentDate = new Date(startDate);
+    const currentDate = new Date(startDate);
+
+    // console.log(currentDate);
 
     if (startDate > endDate) {
       return days;
@@ -70,45 +77,49 @@ const LeaveRequestForm: React.FC<LeaveRequestFormProps> = ({
 
     currentDate.setDate(currentDate.getDate() + 1);
 
-    while (currentDate < endDate) {
+    while (currentDate <= endDate) {
       if (!isWeekend(currentDate)) {
         days++;
       }
       currentDate.setDate(currentDate.getDate() + 1);
     }
+
+    // console.log(days);
     return days;
   };
 
-  // const handleInputChange = (
-  //   event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>
-  // ) => {
-  //   const { name, value } = event.target;
-  //   onChange(event);
-  //   if (name === 'startDate' || name === 'endDate' || name === 'assignedTo') {
-  //     const startDate = new Date(request.startDate);
-  //     const endDate = new Date(request.endDate);
-  //     const days = calculateLeaveDays(startDate, endDate);
-  //     setLeaveDays(days);
-  //   }
-  // };
- 
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>
   ) => {
     const { name, value } = event.target;
-  
+
     if (name === 'startDate' || name === 'endDate' || name === 'leaveType') {
-      // 处理日期字段的格式化和更新
-      const dateValue = new Date(value);
-      onChange(event);
+      const dateValue = value ? new Date(value) : null; // Check if value is valid before creating Date object
+      // console.log(dateValue);
+
+      onChange(event as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>);
       if (name === 'startDate' || name === 'endDate') {
         const startDate = name === 'startDate' ? dateValue : request.startDate;
         const endDate = name === 'endDate' ? dateValue : request.endDate;
-        const days = calculateLeaveDays(startDate, endDate);
-        setLeaveDays(days);
+
+        if (!startDate || !endDate || startDate > endDate) { // Check if startDate or endDate is invalid
+          setRequest(prevState => ({
+            ...prevState,
+            leaveDays: 0, 
+            [name]: dateValue,
+          }));
+        } else {
+          const days = calculateLeaveDays(startDate, endDate);
+          console.log(days);
+          
+          setRequest(prevState => ({
+            ...prevState,
+            leaveDays: days, 
+            [name]: dateValue,
+          }));
+        }
       }
-  
-      // 处理 leaveType 字段的更新
+
       if (name === 'leaveType') {
         setRequest(prevState => ({
           ...prevState,
@@ -116,12 +127,23 @@ const LeaveRequestForm: React.FC<LeaveRequestFormProps> = ({
         }));
       }
     } else {
-      onChange(event);
+      onChange(event as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>);
     }
   };
 
+  const handleCreate = () => {
+    onCreate();
 
+    setRequest({
+      startDate: null,
+      endDate: null,
+      leaveType: '',
+      reason: '',
+      assignedTo: '',
+      leaveDays: 0
+    });
 
+  };
 
   return (
     <DialogContent>
@@ -133,11 +155,8 @@ const LeaveRequestForm: React.FC<LeaveRequestFormProps> = ({
         fullWidth
         InputLabelProps={{ shrink: true }}
         name="startDate"
-        value={format(request.startDate, 'yyyy-MM-dd')}
+        value={request.startDate ? format(request.startDate, 'yyyy-MM-dd') : ''}
         onChange={handleInputChange}
-        inputProps={{
-          min: format(today, 'yyyy-MM-dd'),
-        }}
       />
       <TextField
         margin="dense"
@@ -146,16 +165,17 @@ const LeaveRequestForm: React.FC<LeaveRequestFormProps> = ({
         fullWidth
         InputLabelProps={{ shrink: true }}
         name="endDate"
-        value={format(request.endDate, 'yyyy-MM-dd')}
+        value={request.endDate ? format(request.endDate, 'yyyy-MM-dd') : ''}
         onChange={handleInputChange}
-        inputProps={{
-          min: format(new Date(), 'yyyy-MM-dd'),
-        }}
       />
-     
+
       <FormControl fullWidth margin="dense">
         <InputLabel>Leave Type</InputLabel>
-        <Select value={request.leaveType} onChange={onSelectChange} name="leaveType">
+        <Select
+          value={request.leaveType}
+          onChange={onSelectChange}
+          name="leaveType"
+        >
           <MenuItem value="Personal">Personal</MenuItem>
           <MenuItem value="Sick">Sick</MenuItem>
           <MenuItem value="Vacation">Vacation</MenuItem>
@@ -175,13 +195,20 @@ const LeaveRequestForm: React.FC<LeaveRequestFormProps> = ({
         inputProps={{ maxLength: 50 }}
       />
       <Box display="flex" justifyContent="flex-end">
-        <Typography variant="caption" color={request.reason.length > 50 ? 'error' : 'inherit'}>
+        <Typography
+          variant="caption"
+          color={request.reason.length > 50 ? 'error' : 'inherit'}
+        >
           {`${request.reason.length}/50`}
         </Typography>
       </Box>
       <FormControl fullWidth margin="dense">
         <InputLabel>Assign To</InputLabel>
-        <Select value={request.assignedTo} onChange={handleInputChange} name="assignedTo">
+        <Select
+          value={request.assignedTo}
+          onChange={handleInputChange}
+          name="assignedTo"
+        >
           {userList.map((user, index) => (
             <MenuItem key={index} value={user}>
               {user}
@@ -189,8 +216,8 @@ const LeaveRequestForm: React.FC<LeaveRequestFormProps> = ({
           ))}
         </Select>
       </FormControl>
-      <p>Leave Days: {leaveDays}</p>
-      <Button onClick={onCreate}>Create</Button>
+      <p>Leave Days: {request.leaveDays}</p>
+      <Button onClick={handleCreate}>Create</Button>
       <Button onClick={onCancel}>Cancel</Button>
     </DialogContent>
   );

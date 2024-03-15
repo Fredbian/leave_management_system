@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   useTheme,
   Button,
@@ -13,14 +13,20 @@ import { SelectChangeEvent } from '@mui/material/Select';
 const Dashboard = () => {
   const { palette } = useTheme();
   const [open, setOpen] = useState(false);
+  const [leaveDays, setLeaveDays] = useState<number | null>(null);
 
   const [newRequest, setNewRequest] = useState({
-    startDate: new Date(),
-    endDate: new Date(),
+    startDate: null,
+    endDate: null,
     leaveType: '',
     reason: '',
     assignedTo: '',
+    leaveDays: 0
   });
+
+  // useEffect(() => {
+  //   console.log(newRequest);
+  // }, [newRequest])
 
   const handleOpen = () => {
     setOpen(true)
@@ -66,6 +72,8 @@ const Dashboard = () => {
           onSelectChange={handleSelectChange}
           onCreate={handleCreateRequest}
           onCancel={handleClose}
+          leaveDays={leaveDays}
+          setLeaveDays={setLeaveDays} 
         />
       </Dialog>
     </Container>
