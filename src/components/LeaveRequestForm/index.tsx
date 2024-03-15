@@ -30,7 +30,7 @@ interface LeaveRequestFormProps {
       leaveType: string;
       reason: string;
       assignedTo: string;
-      leaveDays: number | null; 
+      leaveDays: number | null;
     }>
   >;
   onChange: (
@@ -62,9 +62,6 @@ const LeaveRequestForm: React.FC<LeaveRequestFormProps> = ({
   onCancel,
   setRequest,
 }) => {
-
-  const today = new Date();
-
   const calculateLeaveDays = (startDate: Date, endDate: Date) => {
     let days = 0;
     const currentDate = new Date(startDate);
@@ -89,7 +86,9 @@ const LeaveRequestForm: React.FC<LeaveRequestFormProps> = ({
   };
 
   const handleInputChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>
+    event:
+      | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+      | SelectChangeEvent<string>
   ) => {
     const { name, value } = event.target;
 
@@ -97,52 +96,104 @@ const LeaveRequestForm: React.FC<LeaveRequestFormProps> = ({
       const dateValue = value ? new Date(value) : null; // Check if value is valid before creating Date object
       // console.log(dateValue);
 
-      onChange(event as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>);
+      onChange(
+        event as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+      );
       if (name === 'startDate' || name === 'endDate') {
         const startDate = name === 'startDate' ? dateValue : request.startDate;
         const endDate = name === 'endDate' ? dateValue : request.endDate;
 
-        if (!startDate || !endDate || startDate > endDate) { // Check if startDate or endDate is invalid
-          setRequest(prevState => ({
+        if (!startDate || !endDate || startDate > endDate) {
+          // Check if startDate or endDate is invalid
+          setRequest((prevState) => ({
             ...prevState,
-            leaveDays: 0, 
+            leaveDays: 0,
             [name]: dateValue,
           }));
         } else {
           const days = calculateLeaveDays(startDate, endDate);
           console.log(days);
-          
-          setRequest(prevState => ({
+
+          setRequest((prevState) => ({
             ...prevState,
-            leaveDays: days, 
+            leaveDays: days,
             [name]: dateValue,
           }));
         }
       }
 
       if (name === 'leaveType') {
-        setRequest(prevState => ({
+        setRequest((prevState) => ({
           ...prevState,
           leaveType: value,
         }));
       }
     } else {
-      onChange(event as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>);
+      onChange(
+        event as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+      );
     }
   };
 
+  // Function to validate the leave request
+  const validateLeaveRequest = () => {
+    const errors: string[] = [];
+
+    // Check if start date is before the current date
+    if (request.startDate && request.startDate < new Date()) {
+      errors.push('Start date cannot be before the current date.');
+    }
+
+    // Check if end date is before the start date
+    if (
+      request.startDate &&
+      request.endDate &&
+      request.endDate < request.startDate
+    ) {
+      errors.push('End date cannot be before the start date.');
+    }
+
+    // Check if reason is empty
+    if (!request.reason.trim()) {
+      errors.push('Reason cannot be empty.');
+    }
+
+    // Check if leave type is empty
+    if (!request.leaveType.trim()) {
+      errors.push('Leave type cannot be empty.');
+    }
+
+    // Check if user is empty (assuming user is assignedTo)
+    if (!request.assignedTo.trim()) {
+      errors.push('User cannot be empty.');
+    }
+
+    // Check if number of days is 0
+    if (!request.leaveDays || request.leaveDays === 0) {
+      errors.push('Number of days cannot be 0.');
+    }
+
+    return errors;
+  };
+
   const handleCreate = () => {
-    onCreate();
+    const errors = validateLeaveRequest();
 
-    setRequest({
-      startDate: null,
-      endDate: null,
-      leaveType: '',
-      reason: '',
-      assignedTo: '',
-      leaveDays: 0
-    });
-
+    if (errors.length === 0) {
+      // Validation passed, submit the form
+      onCreate();
+      setRequest({
+        startDate: null,
+        endDate: null,
+        leaveType: '',
+        reason: '',
+        assignedTo: '',
+        leaveDays: 0
+      });
+    } else {
+      // Validation failed, display errors
+      alert(errors.join("\n"));
+    }
   };
 
   return (
