@@ -31,7 +31,7 @@ interface LeaveRequestFormProps {
       leaveType: string;
       reason: string;
       assignedTo: string;
-      leaveDays: number | null;
+      leaveDays: number ;
     }>
   >;
   onChange: (
@@ -96,7 +96,6 @@ const LeaveRequestForm: React.FC<LeaveRequestFormProps> = ({
 
     if (name === 'startDate' || name === 'endDate' || name === 'leaveType') {
       const dateValue = value ? new Date(value) : null; // Check if value is valid before creating Date object
-      // console.log(dateValue);
 
       onChange(
         event as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -188,14 +187,15 @@ const LeaveRequestForm: React.FC<LeaveRequestFormProps> = ({
 
       // Validation passed, submit the form
       onCreate();
-      setRequest({
+      setRequest(prevState => ({
+        ...prevState,
         startDate: null,
         endDate: null,
         leaveType: '',
         reason: '',
         assignedTo: '',
         leaveDays: 0
-      });
+      }));
 
 
     } else {
