@@ -8,7 +8,8 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import LeaveRequestForm from '@/components/LeaveRequestForm';
 import { SelectChangeEvent } from '@mui/material/Select';
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Dashboard = () => {
   const { palette } = useTheme();
@@ -53,6 +54,7 @@ const Dashboard = () => {
 
   return (
     <Container>
+      <ToastContainer />
       <Button
         startIcon={<AddIcon />}
         sx={{

@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import {
   DialogContent,
   TextField,
@@ -13,6 +12,8 @@ import {
 import { isWeekend, format } from 'date-fns';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { Dispatch, SetStateAction } from 'react';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface LeaveRequestFormProps {
   request: {
@@ -66,7 +67,9 @@ const LeaveRequestForm: React.FC<LeaveRequestFormProps> = ({
     let days = 0;
     const currentDate = new Date(startDate);
 
-    // console.log(currentDate);
+    if (startDate < new Date() || endDate < startDate) {
+      return days;
+    }
 
     if (startDate > endDate) {
       return days;
@@ -81,7 +84,6 @@ const LeaveRequestForm: React.FC<LeaveRequestFormProps> = ({
       currentDate.setDate(currentDate.getDate() + 1);
     }
 
-    // console.log(days);
     return days;
   };
 
@@ -170,7 +172,7 @@ const LeaveRequestForm: React.FC<LeaveRequestFormProps> = ({
 
     // Check if number of days is 0
     if (!request.leaveDays || request.leaveDays === 0) {
-      errors.push('Number of days cannot be 0.');
+      errors.push('Leave Days cannot be 0.');
     }
 
     return errors;
@@ -180,6 +182,10 @@ const LeaveRequestForm: React.FC<LeaveRequestFormProps> = ({
     const errors = validateLeaveRequest();
 
     if (errors.length === 0) {
+
+      // Show success toast notification
+      toast.success("Leave request submitted successfully.");
+
       // Validation passed, submit the form
       onCreate();
       setRequest({
@@ -190,14 +196,19 @@ const LeaveRequestForm: React.FC<LeaveRequestFormProps> = ({
         assignedTo: '',
         leaveDays: 0
       });
+
+
     } else {
       // Validation failed, display errors
-      alert(errors.join("\n"));
+      errors.forEach(error => {
+        toast.error(error);
+      });
     }
   };
 
   return (
     <DialogContent>
+      
       <TextField
         autoFocus
         margin="dense"
