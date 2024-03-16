@@ -67,15 +67,15 @@ const LeaveRequestForm: React.FC<LeaveRequestFormProps> = ({
     let days = 0;
     const currentDate = new Date(startDate);
 
-    if (startDate < new Date() || endDate < startDate) {
+
+    console.log(startDate);
+    console.log(endDate);
+    
+    if (endDate < startDate) {
       return days;
     }
 
-    if (startDate > endDate) {
-      return days;
-    }
-
-    currentDate.setDate(currentDate.getDate() + 1);
+    // currentDate.setDate(currentDate.getDate() + 1);
 
     while (currentDate <= endDate) {
       if (!isWeekend(currentDate)) {
@@ -93,17 +93,17 @@ const LeaveRequestForm: React.FC<LeaveRequestFormProps> = ({
       | SelectChangeEvent<string>
   ) => {
     const { name, value } = event.target;
-
+  
     if (name === 'startDate' || name === 'endDate' || name === 'leaveType') {
       const dateValue = value ? new Date(value) : null; // Check if value is valid before creating Date object
-
+  
       onChange(
         event as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
       );
       if (name === 'startDate' || name === 'endDate') {
-        const startDate = name === 'startDate' ? dateValue : request.startDate;
-        const endDate = name === 'endDate' ? dateValue : request.endDate;
-
+        const startDate = name === 'startDate' ? (dateValue as Date) : request.startDate;
+        const endDate = name === 'endDate' ? (dateValue as Date) : request.endDate;
+  
         if (!startDate || !endDate || startDate > endDate) {
           // Check if startDate or endDate is invalid
           setRequest((prevState) => ({
@@ -114,7 +114,7 @@ const LeaveRequestForm: React.FC<LeaveRequestFormProps> = ({
         } else {
           const days = calculateLeaveDays(startDate, endDate);
           console.log(days);
-
+  
           setRequest((prevState) => ({
             ...prevState,
             leaveDays: days,
@@ -122,7 +122,7 @@ const LeaveRequestForm: React.FC<LeaveRequestFormProps> = ({
           }));
         }
       }
-
+  
       if (name === 'leaveType') {
         setRequest((prevState) => ({
           ...prevState,

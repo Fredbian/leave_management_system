@@ -1,10 +1,5 @@
 import { useState } from 'react';
-import {
-  useTheme,
-  Button,
-  Container,
-  Dialog,
-} from '@mui/material';
+import { useTheme, Button, Container, Dialog } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import LeaveRequestForm from '@/components/LeaveRequestForm';
 import { SelectChangeEvent } from '@mui/material/Select';
@@ -21,29 +16,31 @@ const Dashboard = () => {
     leaveType: '',
     reason: '',
     assignedTo: '',
-    leaveDays: 0
+    leaveDays: 0,
   });
 
-
   const handleOpen = () => {
-    setOpen(true)
-  }
+    setOpen(true);
+  };
 
   const handleClose = () => {
-    setOpen(false)
-  }
+    setOpen(false);
+  };
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = event.target;
     setNewRequest({ ...newRequest, [name]: value });
   };
 
-  const handleSelectChange = (event: SelectChangeEvent<string>) => { 
+  const handleSelectChange = (event: SelectChangeEvent<string>) => {
     setNewRequest({ ...newRequest, leaveType: event.target.value });
   };
 
   const handleCreateRequest = () => {
     // TODO: add logic to create request
+
     console.log('New Leave Request:', newRequest);
     handleClose();
   };
