@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useTheme, Button, Container, Dialog, IconButton } from '@mui/material';
+import { useTheme, Button, Container, Dialog } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -12,7 +12,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { LeaveRequest } from '@/types';
 import { v4 as uuidv4 } from 'uuid';
 import {
-  GridRowsProp,
   GridRowModesModel,
   GridRowModes,
   DataGrid,
@@ -30,7 +29,7 @@ import {
 const Dashboard = () => {
   const { palette } = useTheme();
   const [open, setOpen] = useState(false);
-  const [leaveRequests, setLeaveRequests] = useState<GridRowsProp>([]);
+  const [leaveRequests, setLeaveRequests] = useState<LeaveRequest[]>([]);
   // const [existingRequests, setExistingRequests] = useState<LeaveRequest[]>([])
 
   // --- TEST ---
@@ -257,7 +256,7 @@ const Dashboard = () => {
   };
 
   const processRowUpdate = (newRow: GridRowModel) => {
-    const updatedRow = { ...newRow, isNew: false };
+    const updatedRow = { ...newRow as LeaveRequest, isNew: false };
     setLeaveRequests(leaveRequests.map((request) => (request.id === newRow.id ? updatedRow : request)));
     return updatedRow;
   };

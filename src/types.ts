@@ -6,4 +6,5 @@ export interface LeaveRequest {
   reason: string;
   assignedTo: string;
   leaveDays: number;
+  isNew?: boolean
 }
