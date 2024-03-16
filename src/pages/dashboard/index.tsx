@@ -1,14 +1,22 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTheme, Button, Container, Dialog } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import LeaveRequestForm from '@/components/LeaveRequestForm';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { LeaveRequest } from '@/types';
 
 const Dashboard = () => {
   const { palette } = useTheme();
   const [open, setOpen] = useState(false);
+
+  const [leaveRequests, setLeaveRequests] = useState<LeaveRequest[]>([]);
+
+  // TEST
+  useEffect(() => {
+    console.log(leaveRequests);
+  }, [leaveRequests])
 
   const [newRequest, setNewRequest] = useState({
     startDate: null as Date | null,
@@ -38,11 +46,13 @@ const Dashboard = () => {
     setNewRequest({ ...newRequest, leaveType: event.target.value });
   };
 
-  const handleCreateRequest = () => {
+  const handleCreateRequest = (requestData: LeaveRequest) => {
     // TODO: add logic to create request
-
     console.log('New Leave Request:', newRequest);
+
+    setLeaveRequests([...leaveRequests, requestData]);
     handleClose();
+
   };
 
   return (
@@ -67,6 +77,7 @@ const Dashboard = () => {
           onSelectChange={handleSelectChange}
           onCreate={handleCreateRequest}
           onCancel={handleClose}
+          existingRequests={leaveRequests}
         />
       </Dialog>
     </Container>

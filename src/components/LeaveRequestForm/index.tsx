@@ -14,32 +14,18 @@ import { SelectChangeEvent } from '@mui/material/Select';
 import { Dispatch, SetStateAction } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { LeaveRequest } from '@/types';
 
 interface LeaveRequestFormProps {
-  request: {
-    startDate: Date | null;
-    endDate: Date | null;
-    leaveType: string;
-    reason: string;
-    assignedTo: string;
-    leaveDays: number | null;
-  };
-  setRequest: Dispatch<
-    SetStateAction<{
-      startDate: Date | null;
-      endDate: Date | null;
-      leaveType: string;
-      reason: string;
-      assignedTo: string;
-      leaveDays: number;
-    }>
-  >;
+  request: LeaveRequest;
+  setRequest: Dispatch<SetStateAction<LeaveRequest>>;
   onChange: (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
   onSelectChange: (event: SelectChangeEvent<string>) => void;
-  onCreate: () => void;
+  onCreate: (newRequest: LeaveRequest) => void;
   onCancel: () => void;
+  existingRequests: LeaveRequest[];
 }
 
 const userList = [
@@ -62,28 +48,18 @@ const LeaveRequestForm: React.FC<LeaveRequestFormProps> = ({
   onCreate,
   onCancel,
   setRequest,
+  existingRequests,
 }) => {
   const calculateLeaveDays = (startDate: Date, endDate: Date) => {
     let days = 0;
     const currentDate = new Date(startDate);
     const today = new Date();
 
-    console.log(startDate);
-    console.log(endDate);
-    console.log(today);
-
     if (startDate < today) {
-      console.log(true);
-      return days
+      return days;
     }
 
-    // if (endDate < today) {
-    //   console.log(true);
-    //   return days;
-    // }
-
     if (endDate < startDate) {
-      console.log(true);
       return days;
     }
 
@@ -186,6 +162,54 @@ const LeaveRequestForm: React.FC<LeaveRequestFormProps> = ({
       errors.push('Leave Days cannot be 0.');
     }
 
+    // // Check for overlap with existing leave requests
+    // existingRequests.forEach((existingRequest) => {
+    //   if (
+    //     // Check if the new request's start date falls within the existing request's date range
+    //     (request.startDate &&
+    //       existingRequest.startDate &&
+    //       request.startDate >= existingRequest.startDate &&
+    //       request.startDate <= existingRequest.endDate!) || // Use ! to assert that endDate is not null
+    //     // Check if the new request's end date falls within the existing request's date range
+    //     (request.endDate &&
+    //       existingRequest.startDate &&
+    //       request.endDate >= existingRequest.startDate &&
+    //       request.endDate <= existingRequest.endDate!) || // Use ! to assert that endDate is not null
+    //     // Check if the new request's date range completely encompasses the existing request's date range
+    //     (request.startDate &&
+    //       request.endDate &&
+    //       existingRequest.startDate &&
+    //       existingRequest.endDate &&
+    //       request.startDate <= existingRequest.startDate &&
+    //       request.endDate >= existingRequest.endDate)
+    //   ) {
+    //     errors.push('Leave request overlaps with an existing request.');
+    //   }
+    // });
+
+    // Check for overlap with existing leave requests
+    existingRequests.forEach((existingRequest) => {
+      if (
+        existingRequest.assignedTo === request.assignedTo &&
+        request.startDate &&
+        request.endDate &&
+        existingRequest.startDate &&
+        existingRequest.endDate &&
+        ((request.startDate >= existingRequest.startDate &&
+          request.startDate <= existingRequest.endDate) ||
+          (request.endDate >= existingRequest.startDate &&
+            request.endDate <= existingRequest.endDate) ||
+          (existingRequest.startDate >= request.startDate &&
+            existingRequest.startDate <= request.endDate) ||
+          (existingRequest.endDate >= request.startDate &&
+            existingRequest.endDate <= request.endDate))
+      ) {
+        errors.push(
+          'Leave request overlaps with an existing leave request for the same user.'
+        );
+      }
+    });
+
     return errors;
   };
 
@@ -197,7 +221,10 @@ const LeaveRequestForm: React.FC<LeaveRequestFormProps> = ({
       toast.success('Leave request submitted successfully.');
 
       // Validation passed, submit the form
-      onCreate();
+
+      // Trigger onCreate function and pass the new request
+      onCreate(request); // Pass the new request to the onCreate function
+
       setRequest((prevState) => ({
         ...prevState,
         startDate: null,
