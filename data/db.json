@@ -1,0 +1,311 @@
+
+{
+  "data": [
+    {
+      "id": "1",
+      "startDate": "Mon Mar 18 2024 11:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "endDate": "Mon Mar 18 2024 11:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "leaveType": "Personal",
+      "reason": "reason1",
+      "assignedTo": "User 1",
+      "leaveDays": 1
+    },
+    {
+      "id": "2",
+      "startDate": "Tue Mar 19 2024 12:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "endDate": "Tue Mar 19 2024 12:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "leaveType": "Sick",
+      "reason": "reason2",
+      "assignedTo": "User 2",
+      "leaveDays": 1
+    },
+    {
+      "id": "3",
+      "startDate": "Wed Mar 20 2024 13:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "endDate": "Wed Mar 20 2024 13:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "leaveType": "Vacation",
+      "reason": "reason3",
+      "assignedTo": "User 3",
+      "leaveDays": 1
+    },
+    {
+      "id": "4",
+      "startDate": "Thu Mar 21 2024 14:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "endDate": "Thu Mar 21 2024 14:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "leaveType": "Bereavement",
+      "reason": "reason4",
+      "assignedTo": "User 4",
+      "leaveDays": 1
+    },
+    {
+      "id": "5",
+      "startDate": "Fri Mar 22 2024 15:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "endDate": "Fri Mar 22 2024 15:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "leaveType": "Personal",
+      "reason": "reason5",
+      "assignedTo": "User 5",
+      "leaveDays": 1
+    },
+    {
+      "id": "6",
+      "startDate": "Sat Mar 23 2024 16:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "endDate": "Sat Mar 23 2024 16:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "leaveType": "Sick",
+      "reason": "reason6",
+      "assignedTo": "User 6",
+      "leaveDays": 1
+    },
+    {
+      "id": "7",
+      "startDate": "Sun Mar 24 2024 17:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "endDate": "Sun Mar 24 2024 17:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "leaveType": "Vacation",
+      "reason": "reason7",
+      "assignedTo": "User 7",
+      "leaveDays": 1
+    },
+    {
+      "id": "8",
+      "startDate": "Mon Mar 25 2024 18:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "endDate": "Mon Mar 25 2024 18:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "leaveType": "Bereavement",
+      "reason": "reason8",
+      "assignedTo": "User 8",
+      "leaveDays": 1
+    },
+    {
+      "id": "9",
+      "startDate": "Tue Mar 26 2024 19:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "endDate": "Tue Mar 26 2024 19:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "leaveType": "Personal",
+      "reason": "reason9",
+      "assignedTo": "User 9",
+      "leaveDays": 1
+    },
+    {
+      "id": "10",
+      "startDate": "Wed Mar 27 2024 20:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "endDate": "Wed Mar 27 2024 20:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "leaveType": "Sick",
+      "reason": "reason10",
+      "assignedTo": "User 10",
+      "leaveDays": 1
+    },
+    {
+      "id": "11",
+      "startDate": "Mon Mar 18 2024 11:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "endDate": "Mon Mar 18 2024 11:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "leaveType": "Personal",
+      "reason": "reason11",
+      "assignedTo": "User 1",
+      "leaveDays": 1
+    },
+    {
+      "id": "12",
+      "startDate": "Tue Mar 19 2024 12:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "endDate": "Thu Mar 21 2024 12:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "leaveType": "Sick",
+      "reason": "reason12",
+      "assignedTo": "User 2",
+      "leaveDays": 3
+    },
+    {
+      "id": "13",
+      "startDate": "Wed Mar 20 2024 13:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "endDate": "Fri Mar 22 2024 13:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "leaveType": "Vacation",
+      "reason": "reason13",
+      "assignedTo": "User 3",
+      "leaveDays": 2
+    },
+    {
+      "id": "14",
+      "startDate": "Thu Mar 21 2024 14:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "endDate": "Thu Mar 21 2024 14:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "leaveType": "Bereavement",
+      "reason": "reason14",
+      "assignedTo": "User 4",
+      "leaveDays": 1
+    },
+    {
+      "id": "15",
+      "startDate": "Fri Mar 22 2024 15:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "endDate": "Sun Mar 24 2024 15:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "leaveType": "Personal",
+      "reason": "reason15",
+      "assignedTo": "User 5",
+      "leaveDays": 2
+    },
+    {
+      "id": "16",
+      "startDate": "Sat Mar 23 2024 16:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "endDate": "Tue Mar 26 2024 16:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "leaveType": "Sick",
+      "reason": "reason16",
+      "assignedTo": "User 6",
+      "leaveDays": 3
+    },
+    {
+      "id": "17",
+      "startDate": "Sun Mar 24 2024 17:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "endDate": "Mon Mar 25 2024 17:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "leaveType": "Vacation",
+      "reason": "reason17",
+      "assignedTo": "User 7",
+      "leaveDays": 1
+    },
+    {
+      "id": "18",
+      "startDate": "Mon Mar 25 2024 18:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "endDate": "Thu Mar 28 2024 18:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "leaveType": "Bereavement",
+      "reason": "reason18",
+      "assignedTo": "User 8",
+      "leaveDays": 3
+    },
+    {
+      "id": "19",
+      "startDate": "Tue Mar 26 2024 19:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "endDate": "Wed Mar 27 2024 19:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "leaveType": "Personal",
+      "reason": "reason19",
+      "assignedTo": "User 9",
+      "leaveDays": 1
+    },
+    {
+      "id": "20",
+      "startDate": "Wed Mar 27 2024 20:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "endDate": "Sat Mar 30 2024 20:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "leaveType": "Sick",
+      "reason": "reason20",
+      "assignedTo": "User 10",
+      "leaveDays": 3
+    },
+    {
+      "id": "21",
+      "startDate": "Thu Apr 27 2024 20:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "endDate": "Sat Apr 29 2024 20:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "leaveType": "Personal",
+      "reason": "reason21",
+      "assignedTo": "User 1",
+      "leaveDays": 2
+    },
+    {
+      "id": "22",
+      "startDate": "Fri Apr 28 2024 21:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "endDate": "Sun Apr 30 2024 21:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "leaveType": "Sick",
+      "reason": "reason22",
+      "assignedTo": "User 2",
+      "leaveDays": 2
+    },
+    {
+      "id": "23",
+      "startDate": "Sat Apr 29 2024 22:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "endDate": "Tue May 02 2024 22:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "leaveType": "Vacation",
+      "reason": "reason23",
+      "assignedTo": "User 3",
+      "leaveDays": 3
+    },
+    {
+      "id": "24",
+      "startDate": "Sun Apr 30 2024 23:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "endDate": "Thu May 04 2024 23:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "leaveType": "Bereavement",
+      "reason": "reason24",
+      "assignedTo": "User 4",
+      "leaveDays": 4
+    },
+    {
+      "id": "25",
+      "startDate": "Mon May 01 2024 00:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "endDate": "Fri May 05 2024 00:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "leaveType": "Personal",
+      "reason": "reason25",
+      "assignedTo": "User 5",
+      "leaveDays": 4
+    },
+    {
+      "id": "26",
+      "startDate": "Tue May 02 2024 01:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "endDate": "Sat May 06 2024 01:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "leaveType": "Sick",
+      "reason": "reason26",
+      "assignedTo": "User 6",
+      "leaveDays": 4
+    },
+    {
+      "id": "27",
+      "startDate": "Wed May 03 2024 02:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "endDate": "Sun May 07 2024 02:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "leaveType": "Vacation",
+      "reason": "reason27",
+      "assignedTo": "User 7",
+      "leaveDays": 4
+    },
+    {
+      "id": "28",
+      "startDate": "Thu May 04 2024 03:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "endDate": "Mon May 08 2024 03:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "leaveType": "Bereavement",
+      "reason": "reason28",
+      "assignedTo": "User 8",
+      "leaveDays": 4
+    },
+    {
+      "id": "29",
+      "startDate": "Fri May 05 2024 04:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "endDate": "Tue May 09 2024 04:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "leaveType": "Personal",
+      "reason": "reason29",
+      "assignedTo": "User 9",
+      "leaveDays": 4
+    },
+    {
+      "id": "30",
+      "startDate": "Sat May 06 2024 05:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "endDate": "Wed May 10 2024 05:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "leaveType": "Sick",
+      "reason": "reason30",
+      "assignedTo": "User 10",
+      "leaveDays": 4
+    },
+    {
+      "id": "31",
+      "startDate": "Sun May 07 2024 06:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "endDate": "Sun May 07 2024 06:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "leaveType": "Personal",
+      "reason": "reason31",
+      "assignedTo": "User 1",
+      "leaveDays": 0
+    },
+    {
+      "id": "32",
+      "startDate": "Mon May 08 2024 07:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "endDate": "Tue May 09 2024 07:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "leaveType": "Sick",
+      "reason": "reason32",
+      "assignedTo": "User 2",
+      "leaveDays": 1
+    },
+    {
+      "id": "33",
+      "startDate": "Tue May 09 2024 08:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "endDate": "Thu May 11 2024 08:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "leaveType": "Vacation",
+      "reason": "reason33",
+      "assignedTo": "User 3",
+      "leaveDays": 2
+    },
+    {
+      "id": "34",
+      "startDate": "Wed May 10 2024 09:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "endDate": "Fri May 12 2024 09:00:00 GMT+1100 (Australian Eastern Daylight Time)",
+      "leaveType": "Bereavement",
+      "reason": "reason34",
+      "assignedTo": "User 4",
+      "leaveDays": 2
+    }
+  ]
+}

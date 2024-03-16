@@ -26,7 +26,6 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 
 
-
 const Dashboard = () => {
   const { palette } = useTheme();
   const [open, setOpen] = useState(false);
@@ -105,6 +104,7 @@ const Dashboard = () => {
       headerName: 'Start Date',
       width: 160,
       type: 'date',
+      valueGetter: (params) => new Date(params.row.startDate),
       editable: true,
     },
     {
@@ -112,6 +112,7 @@ const Dashboard = () => {
       headerName: 'End Date',
       width: 160,
       type: 'date',
+      valueGetter: (params) => new Date(params.row.endDate),
       editable: true,
     },
     { field: 'reason', headerName: 'Reason', width: 200, editable: true },   
@@ -240,7 +241,30 @@ const Dashboard = () => {
   const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
     setRowModesModel(newRowModesModel);
   };
-  // -------------
+  // ------------------
+
+
+  // --- GET Moke up data ---
+  const getData = async () => {
+    try {
+      const res = await fetch('http://localhost:3500/data')
+
+      const allLeaveRequests = await res?.json()
+      console.log(allLeaveRequests);
+      setLeaveRequests(allLeaveRequests)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    getData()
+  },[])
+
+  // -------------------------
+
+
+
 
   return (
     <Container>
@@ -268,7 +292,7 @@ const Dashboard = () => {
         />
       </Dialog>
 
-      <div style={{ height: 550, width: '100%', marginTop: 20 }}>
+      <div style={{ height: 600, width: '100%', marginTop: 20 }}>
         <DataGrid
           rows={dataToDisplay}
           columns={columns}
