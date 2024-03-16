@@ -3,19 +3,35 @@ import { useTheme, Button, Container, Dialog, IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Close';
 import LeaveRequestForm from '@/components/LeaveRequestForm';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { LeaveRequest } from '@/types';
 import { v4 as uuidv4 } from 'uuid';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import {
+  GridRowsProp,
+  GridRowModesModel,
+  GridRowModes,
+  DataGrid,
+  GridColDef,
+  GridActionsCellItem,
+  GridEventListener,
+  GridRowId,
+  GridRowModel,
+  GridRowEditStopReasons,
+} from '@mui/x-data-grid';
 
+
+// type LeaveRequestGridData = LeaveRequest[] | GridRowsProp;
 
 const Dashboard = () => {
   const { palette } = useTheme();
   const [open, setOpen] = useState(false);
-  const [leaveRequests, setLeaveRequests] = useState<LeaveRequest[]>([]);
+  const [leaveRequests, setLeaveRequests] = useState<GridRowsProp>([]);
+  // const [existingRequests, setExistingRequests] = useState<LeaveRequest[]>([])
 
   // --- TEST ---
   useEffect(() => {
@@ -33,45 +49,130 @@ const Dashboard = () => {
     leaveDays: 0,
   });
 
-// Define columns for the Data Grid
-const columns: GridColDef[] = [
-  { field: 'id', headerName: 'ID', width: 70 },
-  {
-    field: 'assignedTo',
-    headerName: 'Assigned To',
-    width: 130,
-    editable: true,
-  },
-  { field: 'leaveDays', headerName: 'Leave Days', width: 130 },
-  { field: 'leaveType', headerName: 'Leave Type', width: 110 },
-  { field: 'startDate', headerName: 'Start Date', width: 160 },
-  { field: 'endDate', headerName: 'End Date', width: 160 },
-  { field: 'reason', headerName: 'Reason', width: 200 },
-  {
-    field: 'actions',
-    headerName: 'Actions',
-    width: 120,
-    renderCell: (params) => (
-      <>
-        <IconButton
-          onClick={() => handleEdit(params.row)}
-          aria-label="edit"
-          sx={{ bgcolor: 'gray', mr: '10px' }}
-        >
-          <EditIcon sx={{ color: `white` }} />
-        </IconButton>
-        <IconButton
-          onClick={() => handleDelete(params.row.id)}
-          aria-label="delete"
-          sx={{ bgcolor: 'gray' }}
-        >
-          <DeleteIcon sx={{ color: `white` }} />
-        </IconButton>
-      </>
-    ),
-  },
-];
+  // Define columns for the Data Grid
+  const columns: GridColDef[] = [
+    { field: 'id', headerName: 'ID', width: 70 },
+    {
+      field: 'assignedTo',
+      headerName: 'Assigned To',
+      width: 130,
+      type: 'singleSelect',
+      valueOptions: [
+        'User 1',
+        'User 2',
+        'User 3',
+        'User 4',
+        'User 5',
+        'User 6',
+        'User 7',
+        'User 8',
+        'User 9',
+        'User 10',
+      ],
+      editable: true,
+    },
+    {
+      field: 'leaveDays',
+      headerName: 'Leave Days',
+      width: 130,
+      type: 'number',
+      editable: true,
+      align: 'left',
+      headerAlign: 'left',
+    },
+    {
+      field: 'leaveType',
+      headerName: 'Leave Type',
+      width: 110,
+      type: 'singleSelect',
+      editable:true,
+      valueOptions: ['Personal', 'Sick', 'Vacation', 'Bereavement'],
+    },
+    {
+      field: 'startDate',
+      headerName: 'Start Date',
+      width: 160,
+      type: 'date',
+      editable: true,
+    },
+    {
+      field: 'endDate',
+      headerName: 'End Date',
+      width: 160,
+      type: 'date',
+      editable: true,
+    },
+    { field: 'reason', headerName: 'Reason', width: 200, editable: true },
+    // {
+    //   field: 'actions',
+    //   headerName: 'Actions',
+    //   width: 120,
+    //   renderCell: (params) => (
+    //     <>
+    //       <IconButton
+    //         onClick={() => handleEdit(params.row)}
+    //         aria-label="edit"
+    //         sx={{ bgcolor: 'gray', mr: '10px' }}
+    //       >
+    //         <EditIcon sx={{ color: `white` }} />
+    //       </IconButton>
+    //       <IconButton
+    //         onClick={() => handleDelete(params.row.id)}
+    //         aria-label="delete"
+    //         sx={{ bgcolor: 'gray' }}
+    //       >
+    //         <DeleteIcon sx={{ color: `white` }} />
+    //       </IconButton>
+    //     </>
+    //   ),
+    // },
+    {
+      field: 'actions',
+      type: 'actions',
+      headerName: 'Actions',
+      width: 100,
+      cellClassName: 'actions',
+      getActions: ({ id }) => {
+        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
+        if (isInEditMode) {
+          return [
+            <GridActionsCellItem
+              icon={<SaveIcon />}
+              label="Save"
+              sx={{
+                color: 'primary.main',
+              }}
+              onClick={handleSaveClick(id)}
+            />,
+            <GridActionsCellItem
+              icon={<CancelIcon />}
+              label="Cancel"
+              className="textPrimary"
+              onClick={handleCancelClick(id)}
+              color="inherit"
+            />,
+          ];
+        }
+
+        return [
+          <GridActionsCellItem
+            icon={<EditIcon />}
+            label="Edit"
+            className="textPrimary"
+            onClick={handleEditClick(id)}
+            color="inherit"
+          />,
+          <GridActionsCellItem
+            icon={<DeleteIcon />}
+            label="Delete"
+            onClick={handleDeleteClick(id)}
+            color="inherit"
+          />,
+        ];
+      },
+    },
+  ];
 
   const handleOpen = () => {
     setOpen(true);
@@ -101,19 +202,71 @@ const columns: GridColDef[] = [
     handleClose();
   };
 
-  const handleEdit = (row: LeaveRequest) => {
-    // Handle edit action here
-    console.log('Edit Row:', row);
+  // const handleEdit = (row: LeaveRequest) => {
+  //   // Handle edit action here
+  //   console.log('Edit Row:', row);
+  // };
+
+  // const handleDelete = (rowId: string) => {
+  //   console.log('Delete Row:', rowId);
+  //   // Handle delete action here
+  //   const updatedRequests = leaveRequests.filter(
+  //     (request) => request.id !== rowId
+  //   );
+  //   setLeaveRequests(updatedRequests);
+  // };
+
+  // ----- DATA GRID ROW EDIT ---------
+  const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
+
+  const handleRowEditStop: GridEventListener<'rowEditStop'> = (
+    params,
+    event
+  ) => {
+    if (params.reason === GridRowEditStopReasons.rowFocusOut) {
+      event.defaultMuiPrevented = true;
+    }
   };
 
-  const handleDelete = (rowId: string) => {
-    console.log('Delete Row:', rowId);
+  const handleEditClick = (id: GridRowId) => () => {
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+  };
+
+  const handleSaveClick = (id: GridRowId) => () => {
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+  };
+
+  const handleDeleteClick = (id: GridRowId) => () => {
     // Handle delete action here
-    const updatedRequests = leaveRequests.filter((request) => request.id !== rowId);
+    const updatedRequests = leaveRequests.filter(
+      (request) => request.id !== id
+    );
     setLeaveRequests(updatedRequests);
   };
 
+  const handleCancelClick = (id: GridRowId) => () => {
+    setRowModesModel({
+      ...rowModesModel,
+      [id]: { mode: GridRowModes.View, ignoreModifications: true },
+    });
 
+    const editedRow = leaveRequests.find((request) => request.id === id);
+    if (editedRow!.isNew) {
+      setLeaveRequests(leaveRequests.filter((request) => request.id !== id));
+    }
+  };
+
+  const processRowUpdate = (newRow: GridRowModel) => {
+    const updatedRow = { ...newRow, isNew: false };
+    setLeaveRequests(leaveRequests.map((request) => (request.id === newRow.id ? updatedRow : request)));
+    return updatedRow;
+  };
+
+  const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
+    setRowModesModel(newRowModesModel);
+  };
+
+  // __________________________________
 
   return (
     <Container>
@@ -145,6 +298,11 @@ const columns: GridColDef[] = [
         <DataGrid
           rows={leaveRequests}
           columns={columns}
+          editMode="row"
+          rowModesModel={rowModesModel}
+          onRowModesModelChange={handleRowModesModelChange}
+          onRowEditStop={handleRowEditStop}
+          processRowUpdate={processRowUpdate}
           initialState={{
             pagination: {
               paginationModel: { page: 0, pageSize: 5 },
