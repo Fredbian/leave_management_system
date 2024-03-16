@@ -31,7 +31,7 @@ interface LeaveRequestFormProps {
       leaveType: string;
       reason: string;
       assignedTo: string;
-      leaveDays: number ;
+      leaveDays: number;
     }>
   >;
   onChange: (
@@ -66,16 +66,26 @@ const LeaveRequestForm: React.FC<LeaveRequestFormProps> = ({
   const calculateLeaveDays = (startDate: Date, endDate: Date) => {
     let days = 0;
     const currentDate = new Date(startDate);
-
+    const today = new Date();
 
     console.log(startDate);
     console.log(endDate);
-    
-    if (endDate < startDate) {
-      return days;
+    console.log(today);
+
+    if (startDate < today) {
+      console.log(true);
+      return days
     }
 
-    // currentDate.setDate(currentDate.getDate() + 1);
+    // if (endDate < today) {
+    //   console.log(true);
+    //   return days;
+    // }
+
+    if (endDate < startDate) {
+      console.log(true);
+      return days;
+    }
 
     while (currentDate <= endDate) {
       if (!isWeekend(currentDate)) {
@@ -93,17 +103,19 @@ const LeaveRequestForm: React.FC<LeaveRequestFormProps> = ({
       | SelectChangeEvent<string>
   ) => {
     const { name, value } = event.target;
-  
+
     if (name === 'startDate' || name === 'endDate' || name === 'leaveType') {
       const dateValue = value ? new Date(value) : null; // Check if value is valid before creating Date object
-  
+
       onChange(
         event as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
       );
       if (name === 'startDate' || name === 'endDate') {
-        const startDate = name === 'startDate' ? (dateValue as Date) : request.startDate;
-        const endDate = name === 'endDate' ? (dateValue as Date) : request.endDate;
-  
+        const startDate =
+          name === 'startDate' ? (dateValue as Date) : request.startDate;
+        const endDate =
+          name === 'endDate' ? (dateValue as Date) : request.endDate;
+
         if (!startDate || !endDate || startDate > endDate) {
           // Check if startDate or endDate is invalid
           setRequest((prevState) => ({
@@ -114,7 +126,7 @@ const LeaveRequestForm: React.FC<LeaveRequestFormProps> = ({
         } else {
           const days = calculateLeaveDays(startDate, endDate);
           console.log(days);
-  
+
           setRequest((prevState) => ({
             ...prevState,
             leaveDays: days,
@@ -122,7 +134,7 @@ const LeaveRequestForm: React.FC<LeaveRequestFormProps> = ({
           }));
         }
       }
-  
+
       if (name === 'leaveType') {
         setRequest((prevState) => ({
           ...prevState,
@@ -181,26 +193,23 @@ const LeaveRequestForm: React.FC<LeaveRequestFormProps> = ({
     const errors = validateLeaveRequest();
 
     if (errors.length === 0) {
-
       // Show success toast notification
-      toast.success("Leave request submitted successfully.");
+      toast.success('Leave request submitted successfully.');
 
       // Validation passed, submit the form
       onCreate();
-      setRequest(prevState => ({
+      setRequest((prevState) => ({
         ...prevState,
         startDate: null,
         endDate: null,
         leaveType: '',
         reason: '',
         assignedTo: '',
-        leaveDays: 0
+        leaveDays: 0,
       }));
-
-
     } else {
       // Validation failed, display errors
-      errors.forEach(error => {
+      errors.forEach((error) => {
         toast.error(error);
       });
     }
@@ -208,7 +217,6 @@ const LeaveRequestForm: React.FC<LeaveRequestFormProps> = ({
 
   return (
     <DialogContent>
-      
       <TextField
         autoFocus
         margin="dense"
