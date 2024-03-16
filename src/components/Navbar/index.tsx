@@ -32,7 +32,7 @@ const Navbar = () => {
       <FlexBetween gap="0.75rem">
         <PixIcon sx={{ fontSize: '28px' }} />
         <Typography variant="h4" fontSize={'20px'} color={'black'} fontWeight={800}>
-          Leave Management
+          Leave Manager
         </Typography>
       </FlexBetween>
       {/* RIGHT - search bar */}
