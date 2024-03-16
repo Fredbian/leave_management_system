@@ -1,4 +1,5 @@
 export interface LeaveRequest {
+  id: string;
   startDate: Date | null;
   endDate: Date | null;
   leaveType: string;

@@ -6,6 +6,8 @@ import { SelectChangeEvent } from '@mui/material/Select';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { LeaveRequest } from '@/types';
+import { v4 as uuidv4 } from 'uuid'; 
+
 
 const Dashboard = () => {
   const { palette } = useTheme();
@@ -19,6 +21,7 @@ const Dashboard = () => {
   }, [leaveRequests])
 
   const [newRequest, setNewRequest] = useState({
+    id: '',
     startDate: null as Date | null,
     endDate: null as Date | null,
     leaveType: '',
@@ -47,10 +50,12 @@ const Dashboard = () => {
   };
 
   const handleCreateRequest = (requestData: LeaveRequest) => {
-    // TODO: add logic to create request
-    console.log('New Leave Request:', newRequest);
 
-    setLeaveRequests([...leaveRequests, requestData]);
+    // console.log('New Leave Request:', newRequest);
+
+    const id = uuidv4()
+
+    setLeaveRequests([...leaveRequests, { ...requestData, id }]);
     handleClose();
 
   };

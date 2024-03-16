@@ -15,6 +15,7 @@ import { Dispatch, SetStateAction } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { LeaveRequest } from '@/types';
+import { v4 as uuidv4 } from 'uuid';
 
 interface LeaveRequestFormProps {
   request: LeaveRequest;
@@ -221,9 +222,13 @@ const LeaveRequestForm: React.FC<LeaveRequestFormProps> = ({
       toast.success('Leave request submitted successfully.');
 
       // Validation passed, submit the form
+      // Generate unique id for the new request
+      const id = uuidv4();
 
+      // console.log(request);
+      
       // Trigger onCreate function and pass the new request
-      onCreate(request); // Pass the new request to the onCreate function
+      onCreate({ ...request, id });// Pass the new request to the onCreate function
 
       setRequest((prevState) => ({
         ...prevState,
