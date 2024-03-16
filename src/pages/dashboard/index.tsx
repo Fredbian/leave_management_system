@@ -22,17 +22,30 @@ import {
   GridRowModel,
   GridRowEditStopReasons,
 } from '@mui/x-data-grid';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
 
-// type LeaveRequestGridData = LeaveRequest[] | GridRowsProp;
 
 const Dashboard = () => {
   const { palette } = useTheme();
   const [open, setOpen] = useState(false);
   const [leaveRequests, setLeaveRequests] = useState<LeaveRequest[]>([]);
-  // const [existingRequests, setExistingRequests] = useState<LeaveRequest[]>([])
+  const searchInput = useSelector((state: RootState) => state.search.search )
+
+  // Filter leaveRequests based on search input
+  const filteredRequests = leaveRequests.filter(request =>
+    Object.values(request).some(value =>
+      typeof value === 'string' && value.toLowerCase().includes(searchInput.toLowerCase())
+    )
+  );
+
+  // Determine which data to display based on search input
+  const dataToDisplay = searchInput ? filteredRequests : leaveRequests;
 
   // --- TEST ---
+  console.log(searchInput);
+  
   useEffect(() => {
     console.log(leaveRequests);
   }, [leaveRequests]);
@@ -101,30 +114,7 @@ const Dashboard = () => {
       type: 'date',
       editable: true,
     },
-    { field: 'reason', headerName: 'Reason', width: 200, editable: true },
-    // {
-    //   field: 'actions',
-    //   headerName: 'Actions',
-    //   width: 120,
-    //   renderCell: (params) => (
-    //     <>
-    //       <IconButton
-    //         onClick={() => handleEdit(params.row)}
-    //         aria-label="edit"
-    //         sx={{ bgcolor: 'gray', mr: '10px' }}
-    //       >
-    //         <EditIcon sx={{ color: `white` }} />
-    //       </IconButton>
-    //       <IconButton
-    //         onClick={() => handleDelete(params.row.id)}
-    //         aria-label="delete"
-    //         sx={{ bgcolor: 'gray' }}
-    //       >
-    //         <DeleteIcon sx={{ color: `white` }} />
-    //       </IconButton>
-    //     </>
-    //   ),
-    // },
+    { field: 'reason', headerName: 'Reason', width: 200, editable: true },   
     {
       field: 'actions',
       type: 'actions',
@@ -201,20 +191,6 @@ const Dashboard = () => {
     handleClose();
   };
 
-  // const handleEdit = (row: LeaveRequest) => {
-  //   // Handle edit action here
-  //   console.log('Edit Row:', row);
-  // };
-
-  // const handleDelete = (rowId: string) => {
-  //   console.log('Delete Row:', rowId);
-  //   // Handle delete action here
-  //   const updatedRequests = leaveRequests.filter(
-  //     (request) => request.id !== rowId
-  //   );
-  //   setLeaveRequests(updatedRequests);
-  // };
-
   // ----- DATA GRID ROW EDIT ---------
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
 
@@ -264,8 +240,7 @@ const Dashboard = () => {
   const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
     setRowModesModel(newRowModesModel);
   };
-
-  // __________________________________
+  // -------------
 
   return (
     <Container>
@@ -295,7 +270,7 @@ const Dashboard = () => {
 
       <div style={{ height: 700, width: '100%', marginTop: 20 }}>
         <DataGrid
-          rows={leaveRequests}
+          rows={dataToDisplay}
           columns={columns}
           editMode="row"
           rowModesModel={rowModesModel}
