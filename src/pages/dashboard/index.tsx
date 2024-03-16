@@ -283,7 +283,15 @@ const Dashboard = () => {
             },
           }}
           pageSizeOptions={[5, 10]}
-          sx={{ fontWeight: '500', boxShadow:2, border: 2, borderColor: 'black' }}
+          sx={{ 
+            fontWeight: '500', 
+            boxShadow:2, 
+            border: 2, 
+            borderColor: 'black',
+            '& .MuiDataGrid-cell:hover': {
+              color: 'primary.main',
+            },
+          }}
         />
       </div>
     </Container>
