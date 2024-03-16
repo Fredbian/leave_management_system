@@ -1,5 +1,5 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-// @ts-expect-error
+
 import  searchReducer  from "./slice";
 
 const rootReducer = combineReducers({
