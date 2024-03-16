@@ -27,16 +27,16 @@ const Navbar = () => {
   };
 
   return (
-    <FlexBetween mb="0.25rem" p="0.5rem 0rem" color={palette.grey[300]}>
+    <FlexBetween mb="0.25rem" p="0.5rem 0rem">
       {/* LEFT - Logo */}
       <FlexBetween gap="0.75rem">
         <PixIcon sx={{ fontSize: '28px' }} />
-        <Typography variant="h4" fontSize={'16px'}>
+        <Typography variant="h4" fontSize={'20px'} color={'black'} fontWeight={800}>
           Leave Management
         </Typography>
       </FlexBetween>
       {/* RIGHT - search bar */}
-      <Box display="flex" bgcolor={palette.grey[100]} borderRadius={'3px'}>
+      <Box display="flex" bgcolor={palette.grey[200]} borderRadius={'3px'}>
         <InputBase
           sx={{ ml: 2, flex: 1 }}
           placeholder="Search"

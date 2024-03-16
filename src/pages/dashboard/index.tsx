@@ -249,7 +249,7 @@ const Dashboard = () => {
         startIcon={<AddIcon />}
         sx={{
           fontWeight: '900',
-          bgcolor: `${palette.grey[100]}`,
+          bgcolor: `${palette.grey[200]}`,
           height: '37px',
         }}
         onClick={handleOpen}
@@ -268,7 +268,7 @@ const Dashboard = () => {
         />
       </Dialog>
 
-      <div style={{ height: 700, width: '100%', marginTop: 20 }}>
+      <div style={{ height: 550, width: '100%', marginTop: 20 }}>
         <DataGrid
           rows={dataToDisplay}
           columns={columns}
@@ -283,7 +283,7 @@ const Dashboard = () => {
             },
           }}
           pageSizeOptions={[5, 10]}
-          sx={{ color: `${palette.grey[100]}` }}
+          sx={{ fontWeight: '500', boxShadow:2, border: 2, borderColor: 'black' }}
         />
       </div>
     </Container>
