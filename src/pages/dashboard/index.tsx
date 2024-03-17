@@ -25,9 +25,6 @@ import {
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 
-// ============================= Page Fetch ======================
-
-// =========================================================
 
 const Dashboard = () => {
   const { palette } = useTheme();
@@ -35,6 +32,44 @@ const Dashboard = () => {
   const [leaveRequests, setLeaveRequests] = useState<LeaveRequest[]>([]);
   const searchInput = useSelector((state: RootState) => state.search.search);
   const [loading, setLoading] = useState(false);
+  
+  
+
+  // ============================= Page Fetch ======================
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 5
+  })   
+  const [rowCount, setRowCount] = useState(0)
+  
+  useEffect(() => {
+    console.log(paginationModel.page);
+    console.log(paginationModel.pageSize);
+  }, [paginationModel])
+
+  useEffect(() => {
+    const getInital = async () => {
+      
+      try {
+        const res = await fetch(`http://localhost:3500/data?`)
+
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+
+        const data = await res.json()
+        // console.log(data);
+        setRowCount(data.length)
+      } catch (error) {
+        console.log(error);
+        
+      }
+    }
+    getInital()
+  }, [])
+
+  
+  // =========================================================
 
   // Filter leaveRequests based on search input
   const filteredRequests = leaveRequests.filter((request) =>
@@ -254,28 +289,32 @@ const Dashboard = () => {
   // ------------------
 
   // --- GET Moke up data ---
-  const getData = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch('http://localhost:3500/data');
-
-      if (!res.ok) {
-        throw new Error(`HTTP error! Status: ${res.status}`);
-      }
-
-      const allLeaveRequests = await res?.json();
-      console.log(allLeaveRequests);
-      setLeaveRequests(allLeaveRequests);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  
   useEffect(() => {
+
+    const getData = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(`http://localhost:3500/data?_page=${paginationModel.page+1}&_per_page=${paginationModel.pageSize}`);
+  
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+  
+        const allLeaveRequests = await res?.json();
+        console.log(allLeaveRequests);
+        if (allLeaveRequests) {
+          setLeaveRequests(allLeaveRequests.data);
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     getData();
-  }, []);
+  }, [paginationModel]);
 
   // -------------------------
 
@@ -309,18 +348,17 @@ const Dashboard = () => {
         <DataGrid
           rows={dataToDisplay}
           columns={columns}
+          rowCount={rowCount}
           editMode="row"
           loading={loading}
+          paginationMode='server'
           rowModesModel={rowModesModel}
           onRowModesModelChange={handleRowModesModelChange}
           onRowEditStop={handleRowEditStop}
           processRowUpdate={processRowUpdate}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 5 },
-            },
-          }}
-          pageSizeOptions={[5, 10, 15, 30]}
+          paginationModel={paginationModel}
+          onPaginationModelChange={setPaginationModel}
+          pageSizeOptions={[5, 10, 15, 30, 50, 100]}
           sx={{
             fontWeight: '500',
             boxShadow: 2,
