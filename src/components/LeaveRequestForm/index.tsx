@@ -8,6 +8,7 @@ import {
   Button,
   Typography,
   Box,
+  useTheme,
 } from '@mui/material';
 import { isWeekend, format } from 'date-fns';
 import { SelectChangeEvent } from '@mui/material/Select';
@@ -41,6 +42,21 @@ const userList = [
   'User 10',
 ];
 
+const publicHolidays: Date[] = [
+  new Date('2024-01-01'), // New Year's Day
+  new Date('2024-01-26'), // Australia Day
+  new Date('2024-03-29'), // Good Friday
+  new Date('2024-03-31'), // Easter Sunday
+  new Date('2024-04-1'), // Easter Monday
+  new Date('2024-04-25'), // ANZAC Day
+  new Date('2024-06-10'), // King's Birthday
+  new Date('2024-09-27'), // Friday before the AFL Grand Final
+  new Date('2024-11-05'), // Melbourne Cup
+  new Date('2024-12-25'), // Christmas Day
+  new Date('2024-12-26'), // Boxing Day
+  // Add more public holidays as needed
+];
+
 const LeaveRequestForm: React.FC<LeaveRequestFormProps> = ({
   request,
   onChange,
@@ -50,26 +66,42 @@ const LeaveRequestForm: React.FC<LeaveRequestFormProps> = ({
   setRequest,
   existingRequests,
 }) => {
-  const calculateLeaveDays = (startDate: Date, endDate: Date) => {
+  const { palette } = useTheme();
+
+  const isPublicHoliday = (date: Date, publicHolidays: Date[]): boolean => {
+    return publicHolidays.some((holiday) => {
+      return (
+        date.getDate() === holiday.getDate() &&
+        date.getMonth() === holiday.getMonth() &&
+        date.getFullYear() === holiday.getFullYear()
+      );
+    });
+  };
+
+  const calculateLeaveDays = (
+    startDate: Date,
+    endDate: Date,
+    publicHolidays: Date[]
+  ) => {
     let days = 0;
     const currentDate = new Date(startDate);
     const today = new Date();
-
+  
     if (startDate < today) {
       return days;
     }
-
+  
     if (endDate < startDate) {
       return days;
     }
-
+  
     while (currentDate <= endDate) {
-      if (!isWeekend(currentDate)) {
+      if (!isWeekend(currentDate) && !isPublicHoliday(currentDate, publicHolidays)) {
         days++;
       }
       currentDate.setDate(currentDate.getDate() + 1);
     }
-
+  
     return days;
   };
 
@@ -100,7 +132,7 @@ const LeaveRequestForm: React.FC<LeaveRequestFormProps> = ({
             [name]: dateValue,
           }));
         } else {
-          const days = calculateLeaveDays(startDate, endDate);
+          const days = calculateLeaveDays(startDate, endDate, publicHolidays);
           console.log(days);
 
           setRequest((prevState) => ({
@@ -242,6 +274,71 @@ const LeaveRequestForm: React.FC<LeaveRequestFormProps> = ({
     }
   };
 
+  // ---- Public Holiday List ----
+  const PublicHolidaysList = ({
+    publicHolidays,
+    startDate,
+    endDate,
+  }: {
+    publicHolidays: Date[];
+    startDate: Date | null;
+    endDate: Date | null;
+  }) => {
+    // const today = new Date();
+
+    return (
+      <Box mt={2}>
+        <Typography variant="h3">Public Holidays:</Typography>
+        <ul style={{ margin: 1 }}>
+          {publicHolidays.map((holiday, index) => (
+            <li key={index} style={{ fontSize: '12px' }}>
+              {format(holiday, 'MMMM d, yyyy')}
+            </li>
+          ))}
+        </ul>
+        <Typography
+          variant="subtitle1"
+          fontWeight={600}
+          color={
+            startDate &&
+            publicHolidays.some(
+              (holiday) => holiday.getTime() === startDate.getTime()
+            )
+              ? 'error'
+              : 'textSecondary'
+          }
+        >
+          {startDate &&
+          publicHolidays.some(
+            (holiday) => holiday.getTime() === startDate.getTime()
+          )
+            ? 'Start date is a public holiday!'
+            : ''}
+        </Typography>
+        <Typography
+          variant="subtitle1"
+          fontWeight={600}
+          color={
+            endDate &&
+            publicHolidays.some(
+              (holiday) => holiday.getTime() === endDate.getTime()
+            )
+              ? 'error'
+              : 'textSecondary'
+          }
+        >
+          {endDate &&
+          publicHolidays.some(
+            (holiday) => holiday.getTime() === endDate.getTime()
+          )
+            ? 'End date is a public holiday!'
+            : ''}
+        </Typography>
+      </Box>
+    );
+  };
+  // ----------------------------
+
   return (
     <DialogContent>
       <TextField
@@ -313,9 +410,20 @@ const LeaveRequestForm: React.FC<LeaveRequestFormProps> = ({
           ))}
         </Select>
       </FormControl>
-      <p>Leave Days: {request.leaveDays}</p>
-      <Button onClick={handleCreate}>Create</Button>
-      <Button onClick={onCancel}>Cancel</Button>
+      <PublicHolidaysList publicHolidays={publicHolidays} startDate={request.startDate} endDate={request.endDate} />
+      <p style={{fontWeight: 600}}>Leave Days: {request.leaveDays}</p>
+      <Button
+        onClick={handleCreate}
+        sx={{ bgcolor: `${palette.grey[200]}`, mr: '10px', fontWeight: 800 }}
+      >
+        Create
+      </Button>
+      <Button
+        onClick={onCancel}
+        sx={{ bgcolor: `${palette.grey[200]}`, fontWeight: 800 }}
+      >
+        Cancel
+      </Button>
     </DialogContent>
   );
 };
