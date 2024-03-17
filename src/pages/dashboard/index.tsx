@@ -87,8 +87,9 @@ const Dashboard = () => {
   console.log(searchInput);
 
   useEffect(() => {
-    console.log(leaveRequests);
-  }, [leaveRequests]);
+    console.log(leaveRequests)
+  }, [leaveRequests])
+
   // ----------
 
   const [newRequest, setNewRequest] = useState({
@@ -348,7 +349,7 @@ const Dashboard = () => {
         <DataGrid
           rows={dataToDisplay}
           columns={columns}
-          rowCount={rowCount}
+          rowCount={rowCount === 0 ? leaveRequests.length : rowCount }
           editMode="row"
           loading={loading}
           paginationMode='server'
