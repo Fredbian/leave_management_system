@@ -31,6 +31,7 @@ const Dashboard = () => {
   const [open, setOpen] = useState(false);
   const [leaveRequests, setLeaveRequests] = useState<LeaveRequest[]>([]);
   const searchInput = useSelector((state: RootState) => state.search.search )
+  const [loading, setLoading] = useState(false);
 
   // Filter leaveRequests based on search input
   const filteredRequests = leaveRequests.filter(request =>
@@ -246,14 +247,21 @@ const Dashboard = () => {
 
   // --- GET Moke up data ---
   const getData = async () => {
+    setLoading(true);
     try {
       const res = await fetch('http://localhost:3500/data')
+
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
 
       const allLeaveRequests = await res?.json()
       console.log(allLeaveRequests);
       setLeaveRequests(allLeaveRequests)
     } catch (error) {
       console.log(error)
+    } finally {
+      setLoading(false);
     }
   }
 
