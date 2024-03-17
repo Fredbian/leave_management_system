@@ -20,4 +20,4 @@ npx json-server -p 3500 -w data/db.json
 ## Url
 
 - Github: https://github.com/Fredbian/leave_management_system 
-- Deploy: https://65f656c7cac9132a1d52f6cb--leavemanager.netlify.app/
+- Deploy: https://65f670c5d3f044389feb99b0--leavemanager.netlify.app/
