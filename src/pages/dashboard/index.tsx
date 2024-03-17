@@ -25,18 +25,23 @@ import {
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 
+// ============================= Page Fetch ======================
+
+// =========================================================
 
 const Dashboard = () => {
   const { palette } = useTheme();
   const [open, setOpen] = useState(false);
   const [leaveRequests, setLeaveRequests] = useState<LeaveRequest[]>([]);
-  const searchInput = useSelector((state: RootState) => state.search.search )
+  const searchInput = useSelector((state: RootState) => state.search.search);
   const [loading, setLoading] = useState(false);
 
   // Filter leaveRequests based on search input
-  const filteredRequests = leaveRequests.filter(request =>
-    Object.values(request).some(value =>
-      typeof value === 'string' && value.toLowerCase().includes(searchInput.toLowerCase())
+  const filteredRequests = leaveRequests.filter((request) =>
+    Object.values(request).some(
+      (value) =>
+        typeof value === 'string' &&
+        value.toLowerCase().includes(searchInput.toLowerCase())
     )
   );
 
@@ -45,7 +50,7 @@ const Dashboard = () => {
 
   // --- TEST ---
   console.log(searchInput);
-  
+
   useEffect(() => {
     console.log(leaveRequests);
   }, [leaveRequests]);
@@ -97,7 +102,7 @@ const Dashboard = () => {
       headerName: 'Leave Type',
       width: 110,
       type: 'singleSelect',
-      editable:true,
+      editable: true,
       valueOptions: ['Personal', 'Sick', 'Vacation', 'Bereavement'],
     },
     {
@@ -116,7 +121,7 @@ const Dashboard = () => {
       valueGetter: (params) => new Date(params.row.endDate),
       editable: true,
     },
-    { field: 'reason', headerName: 'Reason', width: 200, editable: true },   
+    { field: 'reason', headerName: 'Reason', width: 200, editable: true },
     {
       field: 'actions',
       type: 'actions',
@@ -234,8 +239,12 @@ const Dashboard = () => {
   };
 
   const processRowUpdate = (newRow: GridRowModel) => {
-    const updatedRow = { ...newRow as LeaveRequest, isNew: false };
-    setLeaveRequests(leaveRequests.map((request) => (request.id === newRow.id ? updatedRow : request)));
+    const updatedRow = { ...(newRow as LeaveRequest), isNew: false };
+    setLeaveRequests(
+      leaveRequests.map((request) =>
+        request.id === newRow.id ? updatedRow : request
+      )
+    );
     return updatedRow;
   };
 
@@ -244,35 +253,31 @@ const Dashboard = () => {
   };
   // ------------------
 
-
   // --- GET Moke up data ---
   const getData = async () => {
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:3500/data')
+      const res = await fetch('http://localhost:3500/data');
 
       if (!res.ok) {
         throw new Error(`HTTP error! Status: ${res.status}`);
       }
 
-      const allLeaveRequests = await res?.json()
+      const allLeaveRequests = await res?.json();
       console.log(allLeaveRequests);
-      setLeaveRequests(allLeaveRequests)
+      setLeaveRequests(allLeaveRequests);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    getData()
-  },[])
+    getData();
+  }, []);
 
   // -------------------------
-
-
-
 
   return (
     <Container>
@@ -305,6 +310,7 @@ const Dashboard = () => {
           rows={dataToDisplay}
           columns={columns}
           editMode="row"
+          loading={loading}
           rowModesModel={rowModesModel}
           onRowModesModelChange={handleRowModesModelChange}
           onRowEditStop={handleRowEditStop}
@@ -314,11 +320,11 @@ const Dashboard = () => {
               paginationModel: { page: 0, pageSize: 5 },
             },
           }}
-          pageSizeOptions={[5, 10]}
-          sx={{ 
-            fontWeight: '500', 
-            boxShadow:2, 
-            border: 2, 
+          pageSizeOptions={[5, 10, 15, 30]}
+          sx={{
+            fontWeight: '500',
+            boxShadow: 2,
+            border: 2,
             borderColor: 'black',
             '& .MuiDataGrid-cell:hover': {
               color: 'primary.main',
